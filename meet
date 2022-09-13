@@ -1,0 +1,12 @@
+#!/bin/bash
+#Read user input to know how many instance of the zoom meeting to run.
+echo "How many users would you like to create"
+read users
+for i in $(seq $users)
+do
+  echo ${BASH_VERSION}
+  gnome-terminal --tab-with-profile=auto --title="tab$i" -e "python3 zoom.py"
+  sleep 0
+done
+
+
