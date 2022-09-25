@@ -18,7 +18,10 @@ file =  open('./details.csv','r')
 mycsv= csv.DictReader(file,delimiter=',')
 for row in mycsv:
         mycsv= row
-url = 'https://us05web.zoom.us/wc/join/'+str(mycsv['meetingID'])+'?pwd='+str(mycsv['password'])
+if (mycsv['webinar']=='yes'):
+        url = 'https://us06web.zoom.us/wc/join/'+str(mycsv['meetingID'])+'?pwd='+str(mycsv['password'])
+else:
+        url = 'https://us05web.zoom.us/wc/join/'+str(mycsv['meetingID'])+'?pwd='+str(mycsv['password'])
 def join(url):
         options = Options()
         options.headless   = True
