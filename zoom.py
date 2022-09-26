@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from random import randint
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
-
+import re
 
 
 import csv
@@ -24,19 +24,28 @@ else:
         url = 'https://us05web.zoom.us/wc/join/'+str(mycsv['meetingID'])+'?pwd='+str(mycsv['password'])
 def join(url):
         options = Options()
-        options.headless   = True
+        # options.headless   = True
         driver = webdriver.Chrome('/usr/bin/chromedriver', options=options)
         driver.get(url)
-        time.sleep(5)
+        time.sleep(2)
         title = driver.title
         print(title)
         if ("Zoom" in title):
                 try:    
                         text_box = driver.find_element(by=By.NAME, value="inputname")
                         submit_button = driver.find_element(by=By.ID, value="joinBtn")
-                        text_box.send_keys(str(nameList[randint(0,len(nameList))]['names']).capitalize())
+                        name=str(nameList[randint(0,len(nameList))]['names']).capitalize()
+                        text_box.send_keys(name)
+                        time.sleep(1)
                         submit_button.click()
-                        time.sleep(10)
+                        if ('Zoom meeting on web - Zoom'== driver.title):
+                                email_box = driver.find_element(by=By.NAME, value="inputemail")
+                                join_button = driver.find_element(by=By.ID, value="joinBtn")
+                                email = re.sub('[\s+]', '',name)+str(randint(1,100000))+'@gmail.com'
+                                time.sleep(3)
+                                email_box.send_keys(email)
+                                join_button.click()
+
                         if('Error' in driver.title):
                                 print('This meeting link has expired or invalid')
                                 return 'This meeting link has expired or invalid'
